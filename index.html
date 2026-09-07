@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TradeAI Pro Real</title>
+<style>
+:root{--bg:#020b12;--panel:#071620;--line:#173548;--text:#eef6ff;--muted:#8fb0c8;--blue:#2e6cff;--green:#00d68f;--red:#ff4d5a;--gold:#ffb31a}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(#06131e,#02080d);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}.hide{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center}.loginbox{width:min(430px,92vw);background:#071620;border:1px solid var(--line);padding:26px;border-radius:16px}.brand{font-size:26px;font-weight:900}.brand span{color:#58ffd1}
+label{font-size:12px;color:#c6d8e5;display:block;margin:9px 0 5px}input,select{width:100%;padding:10px;background:#07131e;color:#fff;border:1px solid #27465b;border-radius:7px}.primary{width:100%;padding:11px;background:linear-gradient(90deg,#244dcc,#00a878);border:0;color:#fff;border-radius:8px;font-weight:800;margin-top:12px;cursor:pointer}.err{color:#ff8d95;font-size:13px;margin-top:10px}
+.app{display:grid;grid-template-columns:185px 1fr;min-height:100vh}.side{background:#06131f;border-right:1px solid var(--line);padding:14px 10px}.nav{width:100%;text-align:left;padding:10px;border:0;background:transparent;color:#c9d9e7;border-radius:7px;margin:3px 0;cursor:pointer}.nav.active,.nav:hover{background:#173e91;color:white}.main{padding:12px}.hero{text-align:center}.hero h1{font-size:24px;margin:0}.hero p{margin:4px 0 12px;color:#b8cddd}
+.grid{display:grid;grid-template-columns:minmax(0,1.6fr) 320px;gap:8px}.card{background:#071620;border:1px solid var(--line);border-radius:9px;overflow:hidden}.title{padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800}.body{padding:12px}.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.appcard{background:#081927;border:1px solid var(--line);border-radius:11px;padding:13px}.apphead{display:flex;align-items:center;gap:9px}.ico{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#142a3e;font-weight:900}.grow{flex:1}.muted{color:var(--muted);font-size:12px}.btn{padding:8px 10px;border-radius:7px;border:1px solid #2a5774;background:#0e2a40;color:white;cursor:pointer}.btn.good{background:#0c684c;border-color:#19aa7c}.btn.bad{background:#4a1d23;border-color:#8e3d48}
+.wallets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.wallet{background:#0a1c29;border:1px solid var(--line);border-radius:8px;padding:10px}.wallet strong{font-size:18px}.assettable{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:8px;border-bottom:1px solid #163449}
+.chartbox{height:390px;position:relative}.lock{position:absolute;inset:0;background:rgba(2,10,16,.9);display:flex;align-items:center;justify-content:center;text-align:center}.toolbar{padding:8px;border-bottom:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap}.toolbar button{padding:6px 8px;background:#0b1f2f;border:0;color:white;border-radius:5px}.canvas{width:100%;height:100%}.balancebar{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0}.metric{background:#091b28;border:1px solid var(--line);border-radius:8px;padding:10px}.metric b{display:block;font-size:18px}.green{color:var(--green)}.red{color:var(--red)}.gold{color:var(--gold)}
+.modalwrap{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:20}.modal{width:min(500px,92vw);background:#0a1926;border:1px solid var(--line);border-radius:12px;padding:18px}.modal h2{margin-top:0}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions{display:flex;gap:7px;margin-top:10px}.status{padding:10px;border-radius:7px;background:#0d2131;margin-bottom:10px}.status.good{background:#083325}.warn{font-size:12px;color:#f7cb70;background:#2a2312;border:1px solid #5b4a1d;padding:9px;border-radius:7px;margin:8px 0}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.apps,.wallets{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.app{grid-template-columns:1fr}.side{display:none}.apps,.wallets,.balancebar{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<section id="login" class="login"><div class="loginbox"><div class="brand">Trade<span>AI Pro</span></div><h2>Login</h2><label>Email</label><input id="email" type="email"><label>Password</label><input id="password" type="password"><label style="display:flex;gap:8px;align-items:center"><input id="showpass" type="checkbox" style="width:auto"> Show Password</label><button class="primary" id="loginBtn">Login</button><div id="loginErr" class="err"></div></div></section>
+
+<div id="app" class="app hide">
+<aside class="side"><div class="brand" style="font-size:20px;margin:8px">Trade<span>AI Pro</span></div>
+<button class="nav active" data-page="dash">▣ Dashboard</button><button class="nav" data-page="connect">⛓ Connect Apps</button><button class="nav" data-page="wallet">▱ Wallet & Balance</button><button class="nav" data-page="analysis">◉ AI Analysis</button><button class="nav" id="logout">↪ Logout</button>
+</aside>
+<main class="main"><div class="hero"><h1>CONNECT • ANALYZE • TRADE • SMARTER</h1><p>Secure multi-platform account dashboard</p></div>
+
+<section id="dash" class="page">
+<div class="balancebar"><div class="metric">Connected Apps<b id="mApps">0</b></div><div class="metric">Wallet Assets<b id="mAssets">0</b></div><div class="metric">Bullish Score<b id="mBull" class="green">—</b></div><div class="metric">Bearish Score<b id="mBear" class="red">—</b></div></div>
+<div class="grid">
+<div class="card"><div class="toolbar"><b style="padding:6px">BTCUSDT</b><button onclick="loadChart('1m')">1m</button><button onclick="loadChart('5m')">5m</button><button onclick="loadChart('15m')">15m</button><button onclick="loadChart('1h')">1h</button></div><div class="chartbox"><canvas id="chart" class="canvas"></canvas><div id="chartLock" class="lock"><div><h2>Connect an exchange first</h2><p class="muted">Chart and AI unlock after a real API connection validates successfully.</p><button class="btn" onclick="openPage('connect')">Connect App</button></div></div></div></div>
+<div class="card"><div class="title">Connected Wallet</div><div class="body"><div id="walletSummary" class="muted">No account connected.</div><div id="walletMini"></div></div></div>
+</div>
+</section>
+
+<section id="connect" class="page hide"><div class="card"><div class="title">Connect Trading Apps</div><div class="body"><div class="warn">API secrets are sent to this Node server only and kept in server memory. They are not saved in browser localStorage. Use read-only keys first while testing.</div><div class="apps" id="apps"></div></div></div></section>
+<section id="wallet" class="page hide"><div class="card"><div class="title">Real Wallet & Balance</div><div class="body"><div id="wallets" class="wallets"></div><div style="overflow:auto;margin-top:10px"><table class="assettable"><thead><tr><th>Platform</th><th>Asset</th><th>Free</th><th>Locked</th><th>Total</th></tr></thead><tbody id="assetRows"></tbody></table></div></div></div></section>
+<section id="analysis" class="page hide"><div class="card"><div class="title">AI Analysis</div><div class="body"><p>AI analysis becomes active after chart data loads. Current indicator score is shown on Dashboard.</p><div class="status" id="aiStatus">No live analysis yet.</div></div></div></section>
+</main></div>
+
+<div id="modal" class="modalwrap"><div class="modal"><h2 id="modalTitle">Connect</h2><div id="modalNote" class="muted"></div><div class="row"><div><label>Account ID / UID (optional)</label><input id="accountId" placeholder="Your account/UID"></div><div><label>Connection Label</label><input id="label" placeholder="My Account"></div></div><label>API Key</label><input id="apiKey" autocomplete="off"><label>API Secret</label><input id="secret" type="password" autocomplete="off"><div id="passWrap" class="hide"><label>API Passphrase</label><input id="passphrase" type="password" autocomplete="off"></div><div class="actions"><button class="btn good" id="doConnect">Connect & Verify Balance</button><button class="btn" onclick="closeModal()">Cancel</button></div><div id="connectErr" class="err"></div></div></div>
+
+<script>
+const platforms=[
+ {name:"Binance",initial:"BN",mode:"real",note:"Uses Binance API Key + Secret."},
+ {name:"CoinDCX",initial:"CD",mode:"real",note:"Uses CoinDCX API Key + Secret."},
+ {name:"Delta Exchange",initial:"DE",mode:"real",note:"Uses Delta Exchange India API Key + Secret."},
+ {name:"Bybit",initial:"BY",mode:"real",note:"Uses Bybit API Key + Secret."},
+ {name:"OKX",initial:"OK",mode:"real",pass:true,note:"Uses OKX API Key + Secret + Passphrase."},
+ {name:"KuCoin",initial:"KC",mode:"real",pass:true,note:"Uses KuCoin API Key + Secret + Passphrase."},
+ {name:"XM / MT5",initial:"XM",mode:"bridge",note:"MT5/XM needs a separate MetaTrader bridge/terminal service; not a normal exchange REST API."},
+ {name:"TradingView",initial:"TV",mode:"bridge",note:"TradingView is charting/alerts, not a general wallet-balance API connector."}
+];
+let selected="", connections=[], balances={};
+
+const $=s=>document.querySelector(s);
+async function api(url,opts={}){
+ const r=await fetch(url,{headers:{"content-type":"application/json",...(opts.headers||{})},...opts});
+ const d=await r.json().catch(()=>({}));
+ if(!r.ok) throw new Error(d.error||"Request failed");
+ return d;
+}
+async function boot(){
+ const me=await api("/api/me");
+ if(me.loggedIn){showApp(); await refreshConnections();}
+}
+function showApp(){$("#login").classList.add("hide");$("#app").classList.remove("hide")}
+$("#showpass").onchange=e=>$("#password").type=e.target.checked?"text":"password";
+$("#loginBtn").onclick=async()=>{try{await api("/api/login",{method:"POST",body:JSON.stringify({email:$("#email").value,password:$("#password").value})});$("#loginErr").textContent="";showApp();await refreshConnections()}catch(e){$("#loginErr").textContent=e.message}};
+$("#logout").onclick=async()=>{try{await api("/api/logout",{method:"POST"})}catch{} location.reload()};
+document.querySelectorAll(".nav[data-page]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");openPage(b.dataset.page)});
+function openPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.add("hide"));$("#"+id).classList.remove("hide");if(id==="connect")renderApps();if(id==="wallet")refreshAllBalances()}
+function renderApps(){
+ $("#apps").innerHTML=platforms.map(p=>{
+  const on=connections.some(x=>x.platform===p.name);
+  return `<div class="appcard"><div class="apphead"><div class="ico">${p.initial}</div><div class="grow"><b>${p.name}</b><div class="muted">${on?"Connected":"Ready to connect"}</div></div></div><p class="muted">${p.note}</p>${p.mode==="real"?`<button class="btn ${on?"good":""}" onclick="${on?`disconnectPlatform('${p.name.replaceAll("'","\\'")}')`:`openConnect('${p.name.replaceAll("'","\\'")}')`}">${on?"Disconnect":"Connect"}</button>`:`<button class="btn" disabled>Bridge Required</button>`}</div>`;
+ }).join("");
+}
+function openConnect(name){
+ selected=name; const p=platforms.find(x=>x.name===name);
+ $("#modalTitle").textContent="Connect "+name;$("#modalNote").textContent=p.note;
+ $("#passWrap").classList.toggle("hide",!p.pass);$("#modal").style.display="flex";$("#connectErr").textContent="";
+ $("#accountId").value="";$("#label").value=name;$("#apiKey").value="";$("#secret").value="";$("#passphrase").value="";
+}
+function closeModal(){$("#modal").style.display="none"}
+$("#doConnect").onclick=async()=>{
+ try{
+  $("#connectErr").textContent="Verifying with "+selected+"…";
+  const d=await api("/api/connect",{method:"POST",body:JSON.stringify({platform:selected,accountId:$("#accountId").value,label:$("#label").value,apiKey:$("#apiKey").value,secret:$("#secret").value,passphrase:$("#passphrase").value})});
+  $("#connectErr").textContent="";closeModal();await refreshConnections();balances[selected]=d.balance;renderDashboard();renderApps();
+ }catch(e){$("#connectErr").textContent=e.message}
+};
+async function disconnectPlatform(p){try{await api("/api/connect/"+encodeURIComponent(p),{method:"DELETE"});delete balances[p];await refreshConnections();renderApps()}catch(e){alert(e.message)}}
+async function refreshConnections(){const d=await api("/api/connections");connections=d.connections||[];$("#mApps").textContent=connections.length;$("#chartLock").style.display=connections.length?"none":"flex";renderApps();renderDashboard();if(connections.length)loadChart("15m")}
+async function refreshAllBalances(){
+ balances={};
+ for(const c of connections){try{balances[c.platform]=await api("/api/balance/"+encodeURIComponent(c.platform))}catch(e){balances[c.platform]={error:e.message,assets:[]}}}
+ renderWallets();renderDashboard();
+}
+function renderWallets(){
+ let cards=[],rows=[],assetCount=0;
+ for(const c of connections){const b=balances[c.platform];cards.push(`<div class="wallet"><div class="muted">${c.platform}</div><strong>${b?.equity?b.equity:"Connected"}</strong><div class="muted">${c.label||""}</div><button class="btn" onclick="refreshOne('${c.platform.replaceAll("'","\\'")}')">Refresh</button></div>`);for(const a of (b?.assets||[])){assetCount++;rows.push(`<tr><td>${c.platform}</td><td>${a.asset}</td><td>${fmt(a.free)}</td><td>${fmt(a.locked)}</td><td>${fmt(a.total)}</td></tr>`)}}
+ $("#wallets").innerHTML=cards.join("")||'<div class="muted">No connected account.</div>';$("#assetRows").innerHTML=rows.join("");$("#mAssets").textContent=assetCount;
+}
+async function refreshOne(p){try{balances[p]=await api("/api/balance/"+encodeURIComponent(p));renderWallets();renderDashboard()}catch(e){alert(e.message)}}
+function fmt(n){return Number(n||0).toLocaleString(undefined,{maximumFractionDigits:8})}
+function renderDashboard(){
+ const c=connections[0],b=c?balances[c.platform]:null;
+ if(!c){$("#walletSummary").textContent="No account connected.";$("#walletMini").innerHTML="";return}
+ $("#walletSummary").innerHTML=`<b>${c.platform}</b> · ${c.label||""} <button class="btn" onclick="openPage('wallet')">View Wallet</button>`;
+ $("#walletMini").innerHTML=(b?.assets||[]).slice(0,6).map(a=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #163449"><span>${a.asset}</span><b>${fmt(a.total)}</b></div>`).join("")||'<div class="muted" style="margin-top:10px">Open Wallet & Balance and press Refresh.</div>';
+}
+async function loadChart(interval){
+ if(!connections.length)return;
+ try{const d=await api("/api/market/klines?symbol=BTCUSDT&interval="+interval);drawChart(d.candles);analyze(d.candles)}catch(e){console.error(e)}
+}
+function drawChart(c){
+ const cv=$("#chart"),rect=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=rect.width*dpr;cv.height=rect.height*dpr;const ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+ const W=rect.width,H=rect.height;ctx.fillStyle="#071620";ctx.fillRect(0,0,W,H);ctx.strokeStyle="#102739";for(let x=0;x<W;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=55){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+ const hi=Math.max(...c.map(x=>x.high)),lo=Math.min(...c.map(x=>x.low)),step=(W-20)/c.length,sc=v=>20+(hi-v)/(hi-lo)*(H-40);
+ c.forEach((k,i)=>{let x=10+i*step+step/2,yo=sc(k.open),yc=sc(k.close),yh=sc(k.high),yl=sc(k.low),up=k.close>=k.open;ctx.strokeStyle=ctx.fillStyle=up?"#00d68f":"#ff4d5a";ctx.beginPath();ctx.moveTo(x,yh);ctx.lineTo(x,yl);ctx.stroke();ctx.fillRect(x-step*.3,Math.min(yo,yc),Math.max(1,step*.6),Math.max(2,Math.abs(yc-yo)))});
+}
+function ema(a,n){let k=2/(n+1),p=a[0],o=[];for(let i=0;i<a.length;i++){p=i?a[i]*k+p*(1-k):a[i];o.push(p)}return o}
+function rsi(a,n=14){let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];d>=0?g+=d:l-=d}if(!l)return 100;let rs=g/l;return 100-100/(1+rs)}
+function analyze(c){if(c.length<50)return;let a=c.map(x=>x.close),e20=ema(a,20),e50=ema(a,50),R=rsi(a),bull=0,bear=0,last=a.at(-1);last>e20.at(-1)?bull++:bear++;e20.at(-1)>e50.at(-1)?bull++:bear++;R>55?bull++:R<45?bear++:(bull+=.5,bear+=.5);let bp=Math.round(100*bull/(bull+bear)),br=100-bp;$("#mBull").textContent=bp+"%";$("#mBear").textContent=br+"%";$("#aiStatus").textContent=`${bp>=60?"BUY bias":br>=60?"SELL bias":"WAIT"} · Bullish ${bp}% / Bearish ${br}% · RSI ${R.toFixed(1)}. This score is not a guaranteed win rate.`}
+window.addEventListener("resize",()=>connections.length&&loadChart("15m"));
+boot();
+</script>
+</body></html>
